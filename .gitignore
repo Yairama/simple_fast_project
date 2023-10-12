@@ -6,3 +6,5 @@
 /dist
 /sfp.egg-info
 /build
+/build/
+/build/lib/
