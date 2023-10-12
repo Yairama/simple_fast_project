@@ -11,7 +11,6 @@ fn delete_directory_if_exists(dir_path: &str) -> std::io::Result<()> {
 }
 #[test]
 fn test_create_standalone_success() {
-
     let project_name = "test-project";
     match delete_directory_if_exists("relative_path_to_directory") {
         Ok(_) => println!("Directorio borrado o no existía."),

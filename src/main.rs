@@ -5,8 +5,11 @@ mod utils;
 mod test;
 
 use custom_logger::init_logger;
-use std::{env, io, process::{Command, Stdio}};
 use std::io::Write;
+use std::{
+    env, io,
+    process::{Command, Stdio},
+};
 use utils::{format_project_name, read_error_message};
 
 fn main() {
@@ -14,7 +17,6 @@ fn main() {
     if let Err(e) = run_flow() {
         error!("An error occurred: {}", e);
     }
-
 }
 
 fn run_flow() -> Result<(), Box<dyn std::error::Error>> {
@@ -84,7 +86,6 @@ fn check_and_install_package(package: &str) -> Result<(), Box<dyn std::error::Er
     Ok(())
 }
 
-
 fn create_standalone(project_name: &str) -> Result<(), Box<dyn std::error::Error>> {
     let mut output = Command::new("kedro")
         .arg("new")
@@ -107,6 +108,4 @@ fn create_standalone(project_name: &str) -> Result<(), Box<dyn std::error::Error
         let error_message = read_error_message(&mut output)?;
         Err(format!("Can't create Kedro project: {}", error_message).into())
     }
-
 }
-
