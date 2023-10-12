@@ -20,4 +20,6 @@ setup(
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
     url="https://https://github.com/Yairama/simple_fast_project",
+    license="Apache 2.0",
+    license_file="LICENSE.md"
 )
