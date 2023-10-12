@@ -1,10 +1,13 @@
 mod custom_logger;
 mod utils;
 
+#[cfg(test)]
+mod test;
+
 use custom_logger::init_logger;
 use std::{env, io, process::{Command, Stdio}};
 use std::io::Write;
-use utils::format_project_name;
+use utils::{format_project_name, read_error_message};
 
 fn main() {
     init_logger();
@@ -89,17 +92,21 @@ fn create_standalone(project_name: &str) -> Result<(), Box<dyn std::error::Error
         .stdin(Stdio::piped())
         .spawn()?;
 
-
-    output.stdin.as_mut().unwrap().write_all("uwuwuwu\n".as_bytes()).expect("Falló al escribir en stdin");
-
-    let status = output.wait().expect("Falló al esperar el comando kedro.");
-
-    // Verificar si el comando se ejecutó con éxito
-    if !status.success() {
-        eprintln!("Error al crear el proyecto de Kedro.");
-        std::process::exit(1);
+    if let Some(stdin) = output.stdin.as_mut() {
+        stdin.write_all(format!("{}\n", project_name).as_bytes())?;
+    } else {
+        let error_message = read_error_message(&mut output)?;
+        return Err(format!("Failed to open stdin: {}", error_message).into());
     }
 
-    println!("añaaaaaaaaaaaaaaaaaa");
-    Ok(())
+    let status = output.wait()?;
+
+    if status.success() {
+        Ok(())
+    } else {
+        let error_message = read_error_message(&mut output)?;
+        Err(format!("Can't create Kedro project: {}", error_message).into())
+    }
+
 }
+
