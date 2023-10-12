@@ -1,5 +1,5 @@
 [package]
-name = "simple_fast_project"
+name = "sfp"
 version = "0.1.0"
 edition = "2021"
 
