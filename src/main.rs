@@ -2,7 +2,8 @@ mod custom_logger;
 mod utils;
 
 use custom_logger::init_logger;
-use std::{env, io, process::Command};
+use std::{env, io, process::{Command, Stdio}};
+use std::io::Write;
 use utils::format_project_name;
 
 fn main() {
@@ -10,6 +11,7 @@ fn main() {
     if let Err(e) = run_flow() {
         error!("An error occurred: {}", e);
     }
+
 }
 
 fn run_flow() -> Result<(), Box<dyn std::error::Error>> {
@@ -20,9 +22,9 @@ fn run_flow() -> Result<(), Box<dyn std::error::Error>> {
     info!("Using '{}' as python command", python_cmd);
 
     check_python_installed(python_cmd)?;
-    let _project_name = get_project_name()?;
+    let project_name = get_project_name()?;
     check_and_install_package("kedro")?;
-
+    create_standalone(&project_name)?;
     Ok(())
 }
 
@@ -76,5 +78,28 @@ fn check_and_install_package(package: &str) -> Result<(), Box<dyn std::error::Er
     } else {
         info!("The '{}' package is already installed.", package);
     }
+    Ok(())
+}
+
+
+fn create_standalone(project_name: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let mut output = Command::new("kedro")
+        .arg("new")
+        .arg("--starter=standalone-datacatalog")
+        .stdin(Stdio::piped())
+        .spawn()?;
+
+
+    output.stdin.as_mut().unwrap().write_all("uwuwuwu\n".as_bytes()).expect("Falló al escribir en stdin");
+
+    let status = output.wait().expect("Falló al esperar el comando kedro.");
+
+    // Verificar si el comando se ejecutó con éxito
+    if !status.success() {
+        eprintln!("Error al crear el proyecto de Kedro.");
+        std::process::exit(1);
+    }
+
+    println!("añaaaaaaaaaaaaaaaaaa");
     Ok(())
 }
