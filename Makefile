@@ -5,7 +5,7 @@ ifeq ($(wildcard /bin/uname),)
     CP = xcopy /Y
     SLASH = \\
     EXE = .exe
-    INSTALL_WHEELS = for %%f in (dist$(SLASH)sfp-*.whl) do pip install %%f --force-reinstall
+    INSTALL_WHEELS = for %%f in (dist$(SLASH)sfp-*.whl) do python -m pip install %%f --force-reinstall
 else
     # Linux
     RM = rm -rf
