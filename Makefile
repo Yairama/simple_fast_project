@@ -40,7 +40,7 @@ install_python_package:
 upload_pypi:
 	@echo "Uploading the distribution to PyPI..."
 	pip install twine
-	twine upload dist$(SLASH)*
+	twine upload --config-file .pypirc dist$(SLASH)*
 
 clean:
 	@echo "Cleaning up generated files..."

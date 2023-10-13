@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="sfp",
-    version="0.1",
+    version="0.1.2",
     packages=find_packages(),
     install_requires=[
         'jupyter~=1.0',
@@ -24,7 +24,7 @@ setup(
     description="A tool to make a project structure for a data science simple project",
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
-    url="https://https://github.com/Yairama/simple_fast_project",
+    url="https://github.com/Yairama/simple_fast_project",
     license="Apache 2.0",
     license_file="LICENSE.md",
 
