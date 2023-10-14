@@ -21,6 +21,8 @@ PYTHON_DIR = simple_fast_project$(SLASH)
 
 all: build move_to_python build_python_package install_python_package
 
+python_test: clean build move_to_python build_python_package install_python_package
+
 build:
 	@echo "Building the Rust project..."
 	cargo build --release

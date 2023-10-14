@@ -7,9 +7,11 @@ mod test;
 use custom_logger::init_logger;
 use std::io::Write;
 use std::{
-    env, io,
+    env, io, fs,
     process::{Command, Stdio},
 };
+use std::error::Error;
+use std::fmt::format;
 use utils::{format_project_name, read_error_message};
 
 fn main() {
@@ -28,8 +30,22 @@ fn run_flow() -> Result<(), Box<dyn std::error::Error>> {
 
     check_python_installed(python_cmd)?;
     let project_name = get_project_name()?;
-    check_and_install_package("kedro")?;
+
+    //TODO add an exception cather in order to not interrupt the flow in case of not installed package
+    check_and_install_package("numpy")?;
+    check_and_install_package("pandas")?;
+    check_and_install_package("matplotlib")?;
+    check_and_install_package("seaborn")?;
+    check_and_install_package("plotly")?;
+    check_and_install_package("openpyxl")?;
+    check_and_install_package("ipykernel")?;
+    check_and_install_package("jupyter")?;
+    check_and_install_package("jupyterlab")?;
+
+    good!("All recommended packages are now installed!!");
+
     create_standalone(&project_name)?;
+    create_additional_folders(&project_name)?;
     Ok(())
 }
 
@@ -103,9 +119,30 @@ fn create_standalone(project_name: &str) -> Result<(), Box<dyn std::error::Error
     let status = output.wait()?;
 
     if status.success() {
+        good!("The project folder '{}' was created in the current path", project_name);
         Ok(())
     } else {
         let error_message = read_error_message(&mut output)?;
         Err(format!("Can't create Kedro project: {}", error_message).into())
+    }
+}
+
+fn create_additional_folders(project_name: &str) -> Result<(), Box<dyn std::error::Error>> {
+
+    info!("Creating additional resources");
+    create_folder(&format!("{}/src",project_name))?;
+    create_folder(&format!("{}/resources",project_name))?;
+
+    Ok(())
+}
+
+fn create_folder(path: &str) -> Result<(), Box<dyn std::error::Error>> {
+    let status = fs::create_dir(path);
+
+    if status.is_ok() {
+        Ok(())
+    } else {
+        let error_message = format!("Can't create the folder: {}", status.unwrap_err());
+        Err(error_message.into())
     }
 }
