@@ -63,7 +63,7 @@ pub fn init_logger() {
                             .set_intense(true);
                     } else if record.args().to_string().contains("[GOOD]") {
                         style
-                            .set_color(env_logger::fmt::Color::Rgb(255,230,0))
+                            .set_color(env_logger::fmt::Color::Rgb(255, 230, 0))
                             .set_intense(true);
                     }
                 }

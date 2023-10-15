@@ -23,8 +23,7 @@ fn test_create_standalone_success() {
 }
 
 #[test]
-fn test_all_flow(){
-
+fn test_all_flow() {
     let project_name = "test-project";
     match delete_directory_if_exists(project_name) {
         Ok(_) => println!("Directorio borrado o no existía."),
