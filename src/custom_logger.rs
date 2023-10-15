@@ -30,6 +30,12 @@ macro_rules! answer {
     })
 }
 
+#[macro_export]
+macro_rules! good {
+    ($($arg:tt)*) => ({
+        log::info!("[GOOD] {}",format_args!($($arg)*));
+    })
+}
 pub fn init_logger() {
     env_logger::Builder::new()
         .filter(None, LevelFilter::Info)
@@ -54,6 +60,10 @@ pub fn init_logger() {
                     } else if record.args().to_string().contains("[ANS]") {
                         style
                             .set_color(env_logger::fmt::Color::Magenta)
+                            .set_intense(true);
+                    } else if record.args().to_string().contains("[GOOD]") {
+                        style
+                            .set_color(env_logger::fmt::Color::Rgb(255, 230, 0))
                             .set_intense(true);
                     }
                 }
